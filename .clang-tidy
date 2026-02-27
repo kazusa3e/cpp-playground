@@ -1,12 +1,1 @@
----
-
-Checks: "*,
-  -llvm*,
-  -fuchsia*,
-  -altera*,
-  -boost*,
-  -readability-identifier-length,
-  -bugprone-chained-comparison"
-
-HeaderFilterRegex: '^(?!.*/build/)(?!.*/\.cache/)(?!.*/_deps/).*(src|include|tests)/.*'
-SystemHeaders: false
+/home/kazusa/.config/clangd/clang-tidy

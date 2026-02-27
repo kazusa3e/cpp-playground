@@ -3,12 +3,20 @@
 ## How to build
 
 ```bash
-cmake -S. -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-cmake --build build -j$(nproc)
+make configure
+make build
 ```
 
 ## How to run tests
 
+**Run all tests**:
+
 ```
-./build/tests/all_tests
+make test
+```
+
+**Run benchmark tests**:
+
+```
+make benchmark
 ```

@@ -10,15 +10,29 @@ project(
 # disable cxx20 modules
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
-add_library(mylib INTERFACE)
-target_include_directories(mylib INTERFACE ${CMAKE_SOURCE_DIR}/include)
-target_compile_features(mylib INTERFACE cxx_std_20)
+# global template library
+add_library(${PROJECT_NAME}_lib INTERFACE)
+target_compile_features(${PROJECT_NAME}_lib INTERFACE cxx_std_23)
+target_include_directories(${PROJECT_NAME}_lib INTERFACE ${CMAKE_SOURCE_DIR}/include)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(mylib INTERFACE OPTIM_LEVEL="O0")
-elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
-    target_compile_definitions(mylib INTERFACE OPTIM_LEVEL="O3")
-endif()
+# enable sanitizer check
+add_library(${PROJECT_NAME}_sanitizer INTERFACE)
+# set(SANITIZER_FLAGS "-fsanitize=address,undefined,thread,memory,leak -fno-omit-frame-pointer")
+set(SANITIZER_FLAGS -fsanitize=address,undefined,leak -fno-omit-frame-pointer)
+target_compile_options(${PROJECT_NAME}_sanitizer INTERFACE ${SANITIZER_FLAGS})
+target_link_options(${PROJECT_NAME}_sanitizer INTERFACE ${SANITIZER_FLAGS})
+
+option(ENABLE_SANITIZER "Enable sanitizer checks" OFF)
+if (ENABLE_SANITIZER)
+    message(STATUS "Sanitizer checks are enabled.")
+    link_libraries(${PROJECT_NAME}_sanitizer)
+endif(ENABLE_SANITIZER)
 
 add_subdirectory(src)
-add_subdirectory(tests)
+
+option(ENABLE_TESTING "Enable testing" OFF)
+if (ENABLE_TESTING)
+    message(STATUS "Testing is enabled.")
+    enable_testing()
+    add_subdirectory(tests)
+endif(ENABLE_TESTING)
