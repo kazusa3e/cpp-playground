@@ -1,13 +1,13 @@
 SOURCES := $(shell fd -E build '\.(h|hpp|cc)$$')
 BUILD_DIR := build
 
-.PHONY: configure
-configure:
-	cmake --preset=development
-
 .PHONY: build
 build:
 	cmake --build $(BUILD_DIR) -j$(shell nproc)
+
+.PHONY: configure
+configure:
+	cmake --preset=development
 
 .PHONY: test
 test: build
