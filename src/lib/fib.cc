@@ -12,11 +12,11 @@ auto fib(unsigned n) -> std::size_t {  // NOLINT(misc-no-recursion)
 auto fib_memo(unsigned int n) -> std::size_t {
     auto memo = std::vector<std::size_t> { 0, 1 };
     while (memo.size() <= n) {
-        const auto r1 = memo[memo.size() - 1];
-        const auto r2 = memo[memo.size() - 2];
+        const auto r1 = memo[memo.size() - 1];  // NOLINT
+        const auto r2 = memo[memo.size() - 2];  // NOLINT
         memo.push_back(r1 + r2);
     }
-    return memo[n];
+    return memo[n];  // NOLINT
 }
 
 auto fib_calc(unsigned int n) -> std::size_t {

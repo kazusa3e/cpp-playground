@@ -22,11 +22,23 @@ set(SANITIZER_FLAGS -fsanitize=address,undefined,leak -fno-omit-frame-pointer)
 target_compile_options(${PROJECT_NAME}_sanitizer INTERFACE ${SANITIZER_FLAGS})
 target_link_options(${PROJECT_NAME}_sanitizer INTERFACE ${SANITIZER_FLAGS})
 
+# enable strict warnings
+add_library(${PROJECT_NAME}_strict_warnings INTERFACE)
+# set(STRICT_WARNINGS_FLAGS -Wall -Wextra -Wpedantic -Werror)
+set(STRICT_WARNINGS_FLAGS -Wall -Wextra -Werror)
+target_compile_options(${PROJECT_NAME}_strict_warnings INTERFACE ${STRICT_WARNINGS_FLAGS})
+
 option(ENABLE_SANITIZER "Enable sanitizer checks" OFF)
 if (ENABLE_SANITIZER)
     message(STATUS "Sanitizer checks are enabled.")
     link_libraries(${PROJECT_NAME}_sanitizer)
 endif(ENABLE_SANITIZER)
+
+option(ENABLE_STRICT_WARNINGS "Enable strict warnings" OFF)
+if (ENABLE_STRICT_WARNINGS)
+    message(STATUS "Strict warnings are enabled.")
+    link_libraries(${PROJECT_NAME}_strict_warnings)
+endif(ENABLE_STRICT_WARNINGS)
 
 add_subdirectory(src)
 

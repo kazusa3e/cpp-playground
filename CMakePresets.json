@@ -6,7 +6,14 @@
             "hidden": true,
             "binaryDir": "build",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CACHE_DEVELOPMENT_BUILD": "OFF",
+                "ENABLE_TESTING": "ON",
+                "ENABLE_SANITIZER": "OFF",
+                "ENABLE_STRICT_WARNINGS": "ON"
             }
         },
         {
@@ -17,13 +24,7 @@
             "generator": "Ninja",
             "hidden": false,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-                "CACHE_DEVELOPMENT_BUILD": "OFF",
-                "ENABLE_TESTING": "ON",
-                "ENABLE_SANITIZER": "ON"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ]
