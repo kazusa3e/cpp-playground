@@ -1,4 +1,4 @@
-SOURCES := $(shell fd -E build '\.(h|hpp|cc)$$')
+SOURCES := $(shell fd -E build '\.(hpp|ipp|cpp)$$')
 BUILD_DIR := build
 
 .PHONY: build

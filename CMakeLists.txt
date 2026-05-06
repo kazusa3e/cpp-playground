@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.0.0)
 
 project(
-    CPP_PLAYGROUND
+    kuri
     VERSION 0.1.0
     DESCRIPTION "A C++ project to play around with C++ features"
     LANGUAGES CXX
@@ -9,11 +9,6 @@ project(
 
 # disable cxx20 modules
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-
-# global template library
-add_library(${PROJECT_NAME}_lib INTERFACE)
-target_compile_features(${PROJECT_NAME}_lib INTERFACE cxx_std_23)
-target_include_directories(${PROJECT_NAME}_lib INTERFACE ${CMAKE_SOURCE_DIR}/include)
 
 # enable sanitizer check
 add_library(${PROJECT_NAME}_sanitizer INTERFACE)

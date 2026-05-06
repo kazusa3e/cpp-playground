@@ -9,11 +9,11 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "OFF",
                 "CACHE_DEVELOPMENT_BUILD": "OFF",
                 "ENABLE_TESTING": "ON",
                 "ENABLE_SANITIZER": "OFF",
-                "ENABLE_STRICT_WARNINGS": "ON"
+                "ENABLE_STRICT_WARNINGS": "OFF"
             }
         },
         {
@@ -24,7 +24,10 @@
             "generator": "Ninja",
             "hidden": false,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ENABLE_SANITIZER": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "ENABLE_STRICT_WARNINGS": "ON"
             }
         }
     ]

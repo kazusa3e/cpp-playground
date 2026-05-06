@@ -1,6 +1,10 @@
 #include <catch2/benchmark/catch_benchmark.hpp>
 #include <catch2/catch_test_macros.hpp>
-#include "fib/fib.hpp"
+#include "fib.hpp"
+
+using kuri::fib::fib;
+using kuri::fib::fib_calc;
+using kuri::fib::fib_memo;
 
 TEST_CASE("Simple test case", "[fib]") {
     REQUIRE(fib(0) == 0);

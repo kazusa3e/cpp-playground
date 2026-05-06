@@ -1,6 +1,8 @@
+#include "fib.hpp"
 #include <cstddef>
-#include <fib/fib.hpp>
 #include <vector>
+
+namespace kuri::fib {
 
 auto fib(unsigned n) -> std::size_t {  // NOLINT(misc-no-recursion)
     if (n == 0 || n == 1) {
@@ -29,3 +31,5 @@ auto fib_calc(unsigned int n) -> std::size_t {
     }
     return a;
 }
+
+}  // namespace kuri::fib
