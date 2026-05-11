@@ -10,6 +10,12 @@ project(
 # disable cxx20 modules
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
+# common headers
+add_library(${PROJECT_NAME}_common INTERFACE)
+target_compile_features(${PROJECT_NAME}_common INTERFACE cxx_std_23)
+target_include_directories(${PROJECT_NAME}_common INTERFACE ${CMAKE_SOURCE_DIR}/include/${PROJECT_NAME}/common)
+link_libraries(${PROJECT_NAME}_common)
+
 # enable sanitizer check
 add_library(${PROJECT_NAME}_sanitizer INTERFACE)
 # set(SANITIZER_FLAGS "-fsanitize=address,undefined,thread,memory,leak -fno-omit-frame-pointer")

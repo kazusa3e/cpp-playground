@@ -13,6 +13,7 @@ file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test_*.cpp")
 add_executable(all_tests ${TEST_SOURCES})
 target_link_libraries(all_tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(all_tests PRIVATE ${PROJECT_NAME}_fib)
+target_link_libraries(all_tests PRIVATE ${PROJECT_NAME}_net)
 
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 include(CTest)

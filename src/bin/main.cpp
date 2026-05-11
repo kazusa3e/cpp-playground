@@ -2,12 +2,11 @@
 #include <print>
 
 namespace {
-auto test() -> void {
-    std::println("Hello, {}!", "world");
-}
+auto test() -> void { std::println("Hello, {}!", "world"); }
 }  // namespace
 
-auto main(int /*argc*/, const char * /*argv*/[]) -> int {  // NOLINT(bugprone-exception-escape)
+// NOLINTNEXTLINE(bugprone-exception-escape)
+auto main(int /*argc*/, const char * /*argv*/[]) -> int {
     test();
     return 0;
 }
