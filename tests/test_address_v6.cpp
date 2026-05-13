@@ -380,6 +380,29 @@ TEST_CASE("address_v6::from_string with scope ID — numeric",
     REQUIRE(r->is_loopback());
 }
 
+TEST_CASE("address_v6::from_string with scope ID — named interface",
+          "[address_v6][from_string][scope]") {
+    auto r = address_v6::from_string("fe80::1%lo");
+    REQUIRE(r.has_value());
+    REQUIRE(r->is_link_local());
+}
+
+TEST_CASE("address_v6::from_string with scope ID — numeric round-trip",
+          "[address_v6][from_string][scope][roundtrip]") {
+    auto r = address_v6::from_string("::1%42");
+    REQUIRE(r.has_value());
+    REQUIRE(r->scope_id() == 42);
+    REQUIRE(r->is_loopback());
+}
+
+TEST_CASE("address_v6::from_string with scope ID — named round-trip",
+          "[address_v6][from_string][scope][roundtrip]") {
+    auto r = address_v6::from_string("fe80::1%lo");
+    REQUIRE(r.has_value());
+    auto s = r->to_string();
+    REQUIRE(s.contains("%lo"));
+}
+
 TEST_CASE("address_v6::from_string rejects invalid formats",
           "[address_v6][from_string]") {
     auto bad = std::initializer_list<std::string_view> {

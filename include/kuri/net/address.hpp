@@ -28,9 +28,9 @@ struct address_v4_impl {
 
 struct address_v6_impl {
     // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
-    std::array<uint8_t, 16> addr;
+    std::array<uint8_t, 16> addr {};
     // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
-    uint32_t scope_id;
+    uint32_t scope_id {};
 
     auto operator<=>(const address_v6_impl &rhs) const noexcept
         -> std::strong_ordering = default;
@@ -64,7 +64,7 @@ public:
         };
     }
 
-    static auto from_string(std::string_view s)
+    static auto from_string(std::string_view s) noexcept
         -> std::expected<address_v4, std::error_code>;
     [[nodiscard]] auto to_string() const -> std::string;
 
@@ -143,7 +143,7 @@ public:
         return ret;
     }
 
-    static auto from_string(std::string_view s)
+    static auto from_string(std::string_view s) noexcept
         -> std::expected<address_v6, std::error_code>;
     [[nodiscard]] auto to_string() const -> std::string;
 
@@ -239,13 +239,13 @@ public:
     // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
     /* explicit */ address(address_v6 v6) : addr(v6) {}
 
-    static auto from_string(std::string_view s)
+    static auto from_string(std::string_view s) noexcept
         -> std::expected<address, std::error_code> {
         if (const auto v4 = address_v4::from_string(s)) {
-            return address { v4.value() };
+            return address { *v4 };
         }
         if (const auto v6 = address_v6::from_string(s)) {
-            return address { v6.value() };
+            return address { *v6 };
         }
         return std::unexpected(make_error_code(address_errc::invalid_format));
     }

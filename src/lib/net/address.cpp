@@ -3,8 +3,10 @@
 #include <net/if.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <algorithm>
 #include <array>
 #include <charconv>
+#include <cstddef>
 #include <cstdint>
 #include <expected>
 #include <string>
@@ -30,11 +32,16 @@ public:
 
 }  // namespace
 
-auto address_v4::from_string(std::string_view s)
+auto address_v4::from_string(std::string_view s) noexcept
     -> std::expected<address_v4, std::error_code> {
-    const auto z = std::string { s };
+    auto buf = std::array<char, INET_ADDRSTRLEN> {};
+    const auto len = std::min(s.size(), buf.size() - 1);
+    std::ranges::copy_n(s.begin(), static_cast<std::ptrdiff_t>(len),
+                        buf.begin());
+    *(buf.begin() + len) = '\0';
+
     auto addr4 = in_addr {};
-    if (const auto rc = inet_pton(AF_INET, z.c_str(), &addr4); rc == 1) {
+    if (const auto rc = inet_pton(AF_INET, buf.data(), &addr4); rc == 1) {
         return address_v4 { addr4 };
     }
     return std::unexpected(make_error_code(address_errc::invalid_format));
@@ -46,38 +53,46 @@ auto address_v4::to_string() const -> std::string {
     return inet_ntop(AF_INET, &addr, buf.data(), sizeof(buf));
 }
 
-auto address_v6::from_string(std::string_view s)
+auto address_v6::from_string(std::string_view s) noexcept
     -> std::expected<address_v6, std::error_code> {
     const auto pos = s.find('%');
-    const auto addr_part = std::string { s.substr(0, pos) };
+    const auto addr_sv = s.substr(0, pos);
+
+    auto addr_buf = std::array<char, INET6_ADDRSTRLEN> {};
+    const auto addr_len = std::min(addr_sv.size(), addr_buf.size() - 1);
+    std::ranges::copy_n(addr_sv.begin(), static_cast<std::ptrdiff_t>(addr_len),
+                        addr_buf.begin());
+    *(addr_buf.begin() + addr_len) = '\0';
 
     auto addr = in6_addr {};
-    if (const auto rc = inet_pton(AF_INET6, addr_part.c_str(), &addr);
-        rc != 1) {
-        return std::unexpected(address_errc::invalid_format);
+    if (const auto rc = inet_pton(AF_INET6, addr_buf.data(), &addr); rc != 1) {
+        return std::unexpected(make_error_code(address_errc::invalid_format));
     }
 
-    if (pos == std::string::npos) {
+    if (pos == std::string_view::npos) {
         return address_v6 { addr };
     }
 
-    const auto scope_s = std::string { s.substr(pos + 1) };
+    const auto scope_sv = s.substr(pos + 1);
+    auto scope_buf = std::array<char, IF_NAMESIZE> {};
+    const auto scope_len = std::min(scope_sv.size(), scope_buf.size() - 1);
+    std::ranges::copy_n(scope_sv.begin(),
+                        static_cast<std::ptrdiff_t>(scope_len),
+                        scope_buf.begin());
+    *(scope_buf.begin() + scope_len) = '\0';
+
     auto scope_id = uint32_t {};
     const auto [ptr, ec] = std::from_chars(
-        scope_s.c_str(), scope_s.c_str() + scope_s.size(), scope_id);
+        scope_buf.data(), scope_buf.data() + scope_len, scope_id);
 
-    if (ec != std::errc {}) {
-        return std::unexpected(address_errc::invalid_format);
-    }
-
-    if (ptr == scope_s.c_str() + scope_s.size()) {
+    if (ec == std::errc {} && ptr == scope_buf.data() + scope_len) {
         return address_v6 { addr, scope_id };
     }
 
-    if (const auto idx = if_nametoindex(scope_s.c_str()); idx != 0) {
+    if (const auto idx = if_nametoindex(scope_buf.data()); idx != 0) {
         return address_v6 { addr, idx };
     }
-    return std::unexpected(address_errc::invalid_format);
+    return std::unexpected(make_error_code(address_errc::invalid_format));
 }
 
 auto address_v6::to_string() const -> std::string {
@@ -87,10 +102,11 @@ auto address_v6::to_string() const -> std::string {
     auto ret = std::string { buf.data() };
 
     if (impl.scope_id != 0) {
-        buf.fill('0');
+        buf.fill('\0');
         const auto *scope_s = if_indextoname(impl.scope_id, buf.data());
         if (scope_s != nullptr) {
-            ret += std::string { '%' } + scope_s;
+            ret.push_back('%');
+            ret += scope_s;
         }
     }
     return ret;
