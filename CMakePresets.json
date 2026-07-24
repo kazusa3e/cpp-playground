@@ -1,0 +1,90 @@
+{
+    "$schema": "https://cmake.org/cmake/help/latest/_downloads/3e2d73bff478d88a7de0de736ba5e361/schema.json",
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 30
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "hidden": true,
+            "binaryDir": "build",
+            "generator": "Ninja"
+        },
+        {
+            "name": "development",
+            "inherits": [
+                "default"
+            ],
+            "hidden": false,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "ENABLE_STRICT_CHECKS": "ON",
+                "ENABLE_SANITIZERS": "ON",
+                "BUILD_TESTING": "ON",
+                "BUILD_EXAMPLES": "ON"
+            }
+        },
+        {
+            "name": "test",
+            "inherits": [
+                "default"
+            ],
+            "hidden": false,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "ENABLE_STRICT_CHECKS": "ON",
+                "ENABLE_SANITIZERS": "ON",
+                "BUILD_TESTING": "ON",
+                "BUILD_EXAMPLES": "OFF"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": [
+                "default"
+            ],
+            "hidden": false,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "ENABLE_STRICT_CHECKS": "OFF",
+                "ENABLE_SANITIZERS": "OFF",
+                "BUILD_TESTING": "OFF",
+                "BUILD_EXAMPLES": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "development",
+            "configurePreset": "development"
+        },
+        {
+            "name": "test",
+            "configurePreset": "test"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "development",
+            "configurePreset": "development",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "jobs": 0
+            }
+        }
+    ]
+}
