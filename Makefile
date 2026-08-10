@@ -1,4 +1,5 @@
 preset := development
+bindir := build
 
 .PHONY: none
 none:
@@ -28,5 +29,9 @@ format:
 
 .PHONY: lint
 lint: build
-	@find src lib tests examples -type f -name '*.cpp' -print | xargs clang-tidy -p build --quiet 2>/dev/null; \
+	@find src lib tests examples -type f -name '*.cpp' -print | xargs clang-tidy -p $(bindir) --quiet 2>/dev/null; \
 	echo "lint finished (see above for warnings)"
+
+.PHONY: clean
+clean:
+	$(RM) -r $(bindir)
