@@ -4,10 +4,12 @@ Checks: >-
   bugprone-*,
   cert-*,
   modernize-*,
+  -modernize-use-nodiscard,
   performance-*,
-  readability-*
+  readability-*,
+  -readability-identifier-length,
+  -readability-magic-numbers
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 FormatStyle: file
 CheckOptions:
-  readability-identifier-length.IgnoredParameterNames: '^[abn]$'

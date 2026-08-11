@@ -9,6 +9,8 @@ project(
 )
 
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# disable C++20 modules scanning
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
