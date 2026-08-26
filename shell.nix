@@ -2,11 +2,10 @@ let
   pkgs = import <nixpkgs> { };
 
 in
-with pkgs;
 pkgs.mkShell {
   name = "cpp-playground";
 
-  buildInputs = [
+  buildInputs = with pkgs; [
     # clang-tools must come before clang, otherwise clang-unwrapped's
     # bare clang-tidy/clang-format shadow clang-tools' wrapped versions
     # (which auto-inject nix include paths via clang-wrapper nix-support).
@@ -15,6 +14,7 @@ pkgs.mkShell {
     gnumake
     cmake
     ninja
+    llvmPackages.llvm
   ];
 
   shellHook = ''

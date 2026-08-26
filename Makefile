@@ -28,8 +28,8 @@ format:
 	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -print | xargs clang-format -i --style=file
 
 .PHONY: lint
-lint: build
-	@find src lib tests examples -type f -name '*.cpp' -print | xargs clang-tidy -p $(bindir) --quiet 2>/dev/null; \
+lint: configure
+	@find src lib tests examples -type f -name '*.cpp' -print | xargs clang-tidy -p $(bindir) --quiet; \
 	echo "lint finished (see above for warnings)"
 
 .PHONY: clean
