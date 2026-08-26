@@ -5,11 +5,12 @@ bindir := build
 none:
 	@echo "Usage: make <target>"
 	@echo ""
-	@echo "  configure  cmake --preset=<preset>"
-	@echo "  build      cmake --build --preset=<preset>"
-	@echo "  test       ctest --preset=<preset>"
-	@echo "  format     clang-format -i on all .cpp/.hpp"
-	@echo "  lint       clang-tidy on src/ lib/ tests/ examples/"
+	@echo "  configure     cmake --preset=<preset>"
+	@echo "  build         cmake --build --preset=<preset>"
+	@echo "  test          ctest --preset=<preset>"
+	@echo "  format        apply clang-format to C/C++ sources"
+	@echo "  format-check  verify C/C++ source formatting"
+	@echo "  lint          verify formatting and lint all project sources with development"
 
 .PHONY: configure
 configure:
@@ -25,12 +26,17 @@ test: build
 
 .PHONY: format
 format:
-	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -print | xargs clang-format -i --style=file
+	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format -i --style=file {} +
+
+.PHONY: format-check
+format-check:
+	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format --dry-run --Werror --style=file {} +
 
 .PHONY: lint
-lint: configure
-	@find src lib tests examples -type f -name '*.cpp' -print | xargs clang-tidy -p $(bindir) --quiet; \
-	echo "lint finished (see above for warnings)"
+lint: format-check
+	cmake --preset=development
+	@find src lib tests examples -type f -name '*.cpp' -exec clang-tidy -p build --quiet {} +
+	@echo "lint finished"
 
 .PHONY: clean
 clean:
