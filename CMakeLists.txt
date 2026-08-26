@@ -38,5 +38,3 @@ option(BUILD_EXAMPLES "build examples" OFF)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
-
-

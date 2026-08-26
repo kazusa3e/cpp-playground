@@ -15,6 +15,7 @@ pkgs.mkShell {
     cmake
     ninja
     llvmPackages.llvm
+    pre-commit
   ];
 
   shellHook = ''
