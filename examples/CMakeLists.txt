@@ -6,7 +6,19 @@ file(
 
 foreach(source IN LISTS example_sources)
     get_filename_component(example_name "${source}" NAME_WE)
-    string(MAKE_C_IDENTIFIER "${example_name}" example_target)
+    string(MAKE_C_IDENTIFIER "${example_name}" example_identifier)
+    if (example_identifier MATCHES "^example_")
+        set(example_target "${example_identifier}")
+    else()
+        set(example_target "example_${example_identifier}")
+    endif()
+
+    # Preserve uniqueness when different filenames normalize to the same identifier.
+    if (NOT "${example_name}" STREQUAL "${example_identifier}")
+        string(SHA256 example_name_hash "${example_name}")
+        string(SUBSTRING "${example_name_hash}" 0 8 example_name_hash)
+        string(APPEND example_target "_${example_name_hash}")
+    endif()
 
     add_executable("${example_target}" "${source}")
     set_target_properties("${example_target}" PROPERTIES OUTPUT_NAME "${example_name}")
