@@ -25,7 +25,8 @@
                 "ENABLE_STRICT_CHECKS": "ON",
                 "ENABLE_SANITIZERS": "ON",
                 "BUILD_TESTING": "ON",
-                "BUILD_EXAMPLES": "ON"
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_SNIPPETS": "ON"
             }
         },
         {
@@ -41,7 +42,8 @@
                 "ENABLE_STRICT_CHECKS": "ON",
                 "ENABLE_SANITIZERS": "ON",
                 "BUILD_TESTING": "ON",
-                "BUILD_EXAMPLES": "OFF"
+                "BUILD_EXAMPLES": "OFF",
+                "BUILD_SNIPPETS": "OFF"
             }
         },
         {
@@ -57,7 +59,8 @@
                 "ENABLE_STRICT_CHECKS": "OFF",
                 "ENABLE_SANITIZERS": "OFF",
                 "BUILD_TESTING": "OFF",
-                "BUILD_EXAMPLES": "OFF"
+                "BUILD_EXAMPLES": "OFF",
+                "BUILD_SNIPPETS": "OFF"
             }
         }
     ],

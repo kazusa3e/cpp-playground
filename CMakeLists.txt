@@ -38,3 +38,8 @@ option(BUILD_EXAMPLES "build examples" OFF)
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif (BUILD_EXAMPLES)
+
+option(BUILD_SNIPPETS "build standalone snippets" OFF)
+if (BUILD_SNIPPETS)
+    add_subdirectory(snippets)
+endif (BUILD_SNIPPETS)

@@ -26,16 +26,16 @@ test: build
 
 .PHONY: format
 format:
-	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format -i --style=file {} +
+	@find src lib tests examples snippets include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format -i --style=file {} +
 
 .PHONY: format-check
 format-check:
-	@find src lib tests examples include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format --dry-run --Werror --style=file {} +
+	@find src lib tests examples snippets include -type f \( -name '*.cpp' -o -name '*.hpp' \) -exec clang-format --dry-run --Werror --style=file {} +
 
 .PHONY: lint
 lint: format-check
 	cmake --preset=development
-	@find src lib tests examples -type f -name '*.cpp' -exec clang-tidy -p build --quiet {} +
+	@find src lib tests examples snippets -type f -name '*.cpp' -exec clang-tidy -p build --quiet {} +
 	@echo "lint finished"
 
 .PHONY: clean
