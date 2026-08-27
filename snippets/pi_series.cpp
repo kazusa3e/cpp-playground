@@ -1,10 +1,11 @@
+#include <cmath>
 #include <cstddef>
 #include <numeric>
 #include <print>
 #include <ranges>
 #include <vector>
 
-[[nodiscard]] auto calculate_pi(std::size_t term_count) noexcept -> double {
+[[nodiscard]] auto calculate_pi_by_series(std::size_t term_count) noexcept -> double {
     constexpr auto term = [](decltype(term_count) k) noexcept -> double {
         // NOLINTNEXTLINE(readability-magic-numbers)
         return ((k % 2 == 0) ? 1.0 : -1.0) / (2.0 * static_cast<double>(k) + 1.0);
@@ -17,11 +18,33 @@
     return 4.0 * std::accumulate(terms.begin(), terms.end(), 0.0);
 }
 
+[[nodiscard]] auto calculate_pi_by_rectangles(std::size_t rectangle_count) noexcept -> double {
+    if (rectangle_count == 0) return 0.0;
+    constexpr auto r = 2;
+    const auto w = static_cast<double>(r) / static_cast<double>(rectangle_count);
+    auto area = [=](decltype(rectangle_count) i) noexcept -> double {
+        const auto xi = w * (static_cast<double>(i) + 0.5);
+        const auto h = std::sqrt((r * r) - (xi * xi));
+        return h * w;
+    };
+
+    const auto areas = std::views::iota(decltype(rectangle_count){0}, rectangle_count)
+        | std::views::transform(area);
+    return std::accumulate(areas.begin(), areas.end(), 0.0);
+}
+
 // NOLINTNEXTLINE(bugprone-exception-escape)
 auto main() -> int {
-    const auto counts = std::vector<std::size_t>{1'000, 1'000'000, 10'000'000};
-    for (const auto& c : counts) {
-        std::println("with iteration count {}, pi = {}", c, calculate_pi(c));
+    const auto series_counts = std::vector<std::size_t>{1'000, 1'000'000, 10'000'000};
+    std::println("Leibniz series method:");
+    for (const auto& c : series_counts) {
+        std::println("with iteration count {}, pi = {}", c, calculate_pi_by_series(c));
+    }
+
+    const auto rect_counts = std::vector<std::size_t>{1'000, 10'000, 100'000};
+    std::println("Midpoint rectangle method:");
+    for (const auto& c : rect_counts) {
+        std::println("with iteration count {}, pi = {}", c, calculate_pi_by_rectangles(c));
     }
     return 0;
 }
