@@ -6,6 +6,7 @@ Checks: >-
   cert-*,
   modernize-*,
   -modernize-use-nodiscard,
+  misc-const-correctness,
   performance-*,
   readability-*,
   -readability-identifier-length
